@@ -32,8 +32,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,7 +70,7 @@ public class MainActivity extends ActionBarActivity
 
         // haetaan ryhmät www-palvelimelta asynctaskin avulla
         haeRyhmatTask task = new haeRyhmatTask();
-        task.execute(new String[]{"http://172.19.129.105/r0/ryhma/haeryhmat"});
+        task.execute(new String[]{"http://172.19.129.105/r2/ryhma/haeryhmat"});
 
         // etsitään listview-komponentti layoutista
         lvRyhmaLista = (ListView)findViewById(R.id.lvRyhmaLista);
@@ -267,7 +269,7 @@ public class MainActivity extends ActionBarActivity
             arvoParit.put("ss", ss);
 
             /*Lähetetään hashmap url osoitteeseen*/
-            performPostCall("http://172.19.129.105/r0/kayttaja/lisaa", arvoParit);
+            performPostCall("http://172.19.129.105/r2/kayttaja/lisaa", arvoParit);
 
             return null;
         }// postData
@@ -379,7 +381,7 @@ public class MainActivity extends ActionBarActivity
             arvoParit.put("rs", rs);
 
             /*Lähetetään hashmap url osoitteeseen*/
-            performPostCall("http://172.19.129.105/r0/ryhma/lisaa", arvoParit);
+            performPostCall("http://172.19.129.105/r2/ryhma/lisaa", arvoParit);
 
             return null;
         }// postData
@@ -453,27 +455,21 @@ public class MainActivity extends ActionBarActivity
 
         @Override
         protected String doInBackground(String... urls) {
-            // tässä haetaan ryhmät serveriltä
-            String response = "";
-            for (String url : urls) {
-                DefaultHttpClient client = new DefaultHttpClient();
-                HttpGet httpGet = new HttpGet(url);
-                try {
-                    HttpResponse execute = client.execute(httpGet);
-                    InputStream content = execute.getEntity().getContent();
 
-                    BufferedReader buffer = new BufferedReader(
-                            new InputStreamReader(content));
-                    String s = "";
-                    while ((s = buffer.readLine()) != null) {
-                        response += s;
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            HttpURLConnection uc = null;
+            String palautus = "";
+            try{
+                URL url = new URL(urls[0]);
+                uc = (HttpURLConnection) url.openConnection();
+                InputStream in = new BufferedInputStream(uc.getInputStream());
+                palautus = readStream(in);
+            } catch (Exception e){
+                Log.d("oma", "Tuli virhe: " + e);
+            } finally {
+                if (uc != null) uc.disconnect();
             }
-            return response;
+
+            return palautus;
         }// DoInBackground
 
         @Override
@@ -512,11 +508,20 @@ public class MainActivity extends ActionBarActivity
             }
         }// onPostExec
 
-
+        private String readStream(InputStream is){
+            try{
+                ByteArrayOutputStream bo = new ByteArrayOutputStream();
+                int i = is.read();
+                while(i != -1){
+                    bo.write(i);
+                    i = is.read();
+                }
+                return bo.toString();
+            } catch (IOException e) {
+                return "";
+            }
+        }
 
     }//haeRyhmat.task
-
-
-
 
 }// ****************  mainactivity   ***************************
