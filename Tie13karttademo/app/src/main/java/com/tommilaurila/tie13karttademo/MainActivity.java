@@ -33,15 +33,21 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class MainActivity extends ActionBarActivity
@@ -253,47 +259,80 @@ public class MainActivity extends ActionBarActivity
 
 
         private String postData(String kt, String ss) {
-            // Create a new HttpClient and Post Header
-            HttpClient httpclient = new DefaultHttpClient();
-            // TODO: poista kovakoodattu arvo!
-            HttpPost httppost = new HttpPost("http://172.19.129.105/r0/kayttaja/lisaa");
 
-            try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-                nameValuePairs.add(new BasicNameValuePair("kt", kt));
-                nameValuePairs.add(new BasicNameValuePair("ss", ss));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HashMap<String, String> arvoParit = new HashMap<>();
 
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
+            /*Sijoitetaan lähetettävät tiedot hashmappiin*/
+            arvoParit.put("kt", kt);
+            arvoParit.put("ss", ss);
 
-                // According to the JAVA API, InputStream constructor do nothing.
-                //So we can't initialize InputStream although it is not an interface
-                InputStream inputStream = response.getEntity().getContent();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-
-                String bufferedStrChunk = null;
-
-                while((bufferedStrChunk = bufferedReader.readLine()) != null){
-                    stringBuilder.append(bufferedStrChunk);
-                }
-
-                Log.d("oma", "Palautus on: " + stringBuilder.toString());
-
-                // palautetaan serveriltä saatu käyttäjä-id
-                return stringBuilder.toString();
-
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
+            /*Lähetetään hashmap url osoitteeseen*/
+            performPostCall("http://172.19.129.105/r0/kayttaja/lisaa", arvoParit);
 
             return null;
         }// postData
+
+        public String  performPostCall(String requestURL,
+                                       HashMap<String, String> postDataParams) {
+
+            URL url;
+            String response = "";
+            try {
+                url = new URL(requestURL);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+                int responseCode=conn.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line=br.readLine()) != null) {
+                        response+=line;
+                    }
+                }
+                else {
+                    response="";
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+
+        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException{
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for(Map.Entry<String, String> entry : params.entrySet()){
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }//getPostDataString
+
     }//rek.task
 
 
@@ -316,7 +355,7 @@ public class MainActivity extends ActionBarActivity
         @Override
         protected void onPostExecute(String result) {
             // jos result on null, käyttäjä-id:tä ei palautunut serveriltä
-            if(result != null && result.length() > 0) {
+            if (result != null && result.length() > 0) {
                 // ryhmän lisäys onnistui
                 Log.d("oma", "serveriltä palautui ryhmä-id: " + result);
                 ryhmaId = result;
@@ -332,47 +371,79 @@ public class MainActivity extends ActionBarActivity
 
         private String postData(String rl, String rn, String rs) {
             // Create a new HttpClient and Post Header
-            HttpClient httpclient = new DefaultHttpClient();
-            // TODO: poista kovakoodattu arvo!
-            HttpPost httppost = new HttpPost("http://172.19.129.105/r0/ryhma/lisaa");
+            HashMap<String, String> arvoParit = new HashMap<>();
 
-            try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-                nameValuePairs.add(new BasicNameValuePair("rl", rl));
-                nameValuePairs.add(new BasicNameValuePair("rn", rn));
-                nameValuePairs.add(new BasicNameValuePair("rs", rs));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            /*Sijoitetaan lähetettävät tiedot hashmappiin*/
+            arvoParit.put("rl", rl);
+            arvoParit.put("rn", rn);
+            arvoParit.put("rs", rs);
 
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
-
-                // According to the JAVA API, InputStream constructor do nothing.
-                //So we can't initialize InputStream although it is not an interface
-                InputStream inputStream = response.getEntity().getContent();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-
-                String bufferedStrChunk = null;
-
-                while((bufferedStrChunk = bufferedReader.readLine()) != null){
-                    stringBuilder.append(bufferedStrChunk);
-                }
-
-                Log.d("oma", "Palautus on: " + stringBuilder.toString());
-
-                // palautetaan serveriltä saatu käyttäjä-id
-                return stringBuilder.toString();
-
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
+            /*Lähetetään hashmap url osoitteeseen*/
+            performPostCall("http://172.19.129.105/r0/ryhma/lisaa", arvoParit);
 
             return null;
         }// postData
+
+        public String performPostCall(String requestURL,
+                                      HashMap<String, String> postDataParams) {
+
+            URL url;
+            String response = "";
+            try {
+                url = new URL(requestURL);
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("POST");
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
+
+                writer.flush();
+                writer.close();
+                os.close();
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        response += line;
+                    }
+                } else {
+                    response = "";
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return response;
+        }
+
+        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+            StringBuilder result = new StringBuilder();
+            boolean first = true;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (first)
+                    first = false;
+                else
+                    result.append("&");
+
+                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+                result.append("=");
+                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            }
+
+            return result.toString();
+        }//getPostDataString
+
     }//rek.task
 
 
@@ -441,7 +512,11 @@ public class MainActivity extends ActionBarActivity
             }
         }// onPostExec
 
+
+
     }//haeRyhmat.task
+
+
 
 
 }// ****************  mainactivity   ***************************
