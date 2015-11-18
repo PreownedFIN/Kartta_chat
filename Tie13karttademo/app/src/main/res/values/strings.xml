@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Tie13karttademo</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_main">KarttaChat</string>
+    <string name="action_add_group">Uusi ryhmä</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Asetukset</string>
+    <string name="action_rekisterointi">Rekisteröidy</string>
+
+    <string name="ryhmanimi">Ryhmän nimi</string>
+    <string name="salasana">Salasana</string>
+    <string name="kayttajanimi">Käyttäjänimi</string>
+
+    <string name="lisaa">Lisää</string>
+    <string name="peruuta">Peruuta</string>
+
+
+
+</resources>
