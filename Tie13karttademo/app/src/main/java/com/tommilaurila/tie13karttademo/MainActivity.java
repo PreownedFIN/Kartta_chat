@@ -381,7 +381,8 @@ public class MainActivity extends ActionBarActivity
             arvoParit.put("rs", rs);
 
             /*Lähetetään hashmap url osoitteeseen*/
-            performPostCall("http://172.19.129.105/r2/ryhma/lisaa", arvoParit);
+            ApuHttp lisaaRyhma = new ApuHttp();
+            lisaaRyhma.postData("http://172.19.129.105/r2/ryhma/lisaa", arvoParit);
 
             return null;
         }// postData
