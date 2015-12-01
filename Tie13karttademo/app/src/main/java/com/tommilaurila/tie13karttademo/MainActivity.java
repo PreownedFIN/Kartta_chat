@@ -268,6 +268,9 @@ public class MainActivity extends ActionBarActivity
             arvoParit.put("kt", kt);
             arvoParit.put("ss", ss);
 
+            ApuHttp lisaaKayttaja = new ApuHttp();
+            lisaaKayttaja.postData("http://172.19.129.105/r2/kayttaja/lisaa", arvoParit);
+
             /*Lähetetään hashmap url osoitteeseen*/
             performPostCall("http://172.19.129.105/r2/kayttaja/lisaa", arvoParit);
 
@@ -387,67 +390,7 @@ public class MainActivity extends ActionBarActivity
             return null;
         }// postData
 
-        public String performPostCall(String requestURL,
-                                      HashMap<String, String> postDataParams) {
-
-            URL url;
-            String response = "";
-            try {
-                url = new URL(requestURL);
-
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(15000);
-                conn.setConnectTimeout(15000);
-                conn.setRequestMethod("POST");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
-
-
-                OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(os, "UTF-8"));
-                writer.write(getPostDataString(postDataParams));
-
-                writer.flush();
-                writer.close();
-                os.close();
-                int responseCode = conn.getResponseCode();
-
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    String line;
-                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    while ((line = br.readLine()) != null) {
-                        response += line;
-                    }
-                } else {
-                    response = "";
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return response;
-        }
-
-        private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
-            StringBuilder result = new StringBuilder();
-            boolean first = true;
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                if (first)
-                    first = false;
-                else
-                    result.append("&");
-
-                result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-                result.append("=");
-                result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
-            }
-
-            return result.toString();
-        }//getPostDataString
-
-    }//rek.task
+    }//lisaaRyhma.task
 
 
     //sisäluokka, joka hakee serveriltä kaikki ryhmät

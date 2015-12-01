@@ -318,6 +318,7 @@ public class MapsActivity extends FragmentActivity
 
             // "http://172.19.129.105/r0/sijainti/ilmoita"
             // parametrit: url, uid, gid, lat, lng, msg
+
             result = postData(urls[0], urls[1], urls[2], urls[3], urls[4], urls[5]);
 
             return result;
@@ -331,114 +332,19 @@ public class MapsActivity extends FragmentActivity
 
         private String postData(String osoite, String uid, String gid, String lat, String lng, String msg) {
             // Create a new HttpClient and Post Header
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost(osoite);
 
-            try {
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
-                nameValuePairs.add(new BasicNameValuePair("uid", uid));
-                nameValuePairs.add(new BasicNameValuePair("gid", gid));
-                nameValuePairs.add(new BasicNameValuePair("lat", lat));
-                nameValuePairs.add(new BasicNameValuePair("lng", lng));
-                nameValuePairs.add(new BasicNameValuePair("msg", msg));
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+            HashMap<String, String> arvoParit = new HashMap<>();
+            arvoParit.put("uid", uid);
+            arvoParit.put("gid", gid);
+            arvoParit.put("lat", lat);
+            arvoParit.put("lng", lng);
+            arvoParit.put("msg", msg);
 
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
-
-                // According to the JAVA API, InputStream constructor do nothing.
-                //So we can't initialize InputStream although it is not an interface
-                InputStream inputStream = response.getEntity().getContent();
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-
-                String bufferedStrChunk = null;
-
-                while((bufferedStrChunk = bufferedReader.readLine()) != null){
-                    stringBuilder.append(bufferedStrChunk);
-                }
-
-                Log.d("oma", "Palautus on: " + stringBuilder.toString());
-
-                // palautetaan serveriltä saatu käyttäjä-id
-                return stringBuilder.toString();
-
-            } catch (ClientProtocolException e) {
-                // TODO Auto-generated catch block
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-            }
+            ApuHttp ilmoitaSijainti = new ApuHttp();
+            ilmoitaSijainti.postData(osoite, arvoParit);
 
             return null;
         }// postData
     }//IlmoitaSijaintiTask
-
-
-    private class DownloadWebpageTask extends AsyncTask<String, Void, String> {
-        @Override
-        protected String doInBackground(String... urls) {
-
-            // params comes from the execute() call: params[0] is the url.
-            try {
-                return downloadUrl(urls[0]);
-            } catch (IOException e) {
-                return "Unable to retrieve web page. URL may be invalid.";
-            }
-        }
-        // onPostExecute displays the results of the AsyncTask.
-        @Override
-        protected void onPostExecute(String result) {
-            String[] koordinaatit = result.split(",");
-            LatLng haettuPaikka = new LatLng(Double.parseDouble(koordinaatit[0]), Double.parseDouble(koordinaatit[1]));
-            mMap.addMarker(new MarkerOptions().position(haettuPaikka).title("JES!"));
-            Log.d("oma", "tulos on " + result);
-        }//onPostExec
-
-
-        private String downloadUrl(String myurl) throws IOException {
-            InputStream is = null;
-            // Only display the first 500 characters of the retrieved
-            // web page content.
-            int len = 19;
-
-            try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(10000 /* milliseconds */);
-                conn.setConnectTimeout(15000 /* milliseconds */);
-                conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                // Starts the query
-                conn.connect();
-                int response = conn.getResponseCode();
-                //Log.d(DEBUG_TAG, "The response is: " + response);
-                is = conn.getInputStream();
-
-                // Convert the InputStream into a string
-                String contentAsString = readIt(is, len);
-                return contentAsString;
-
-                // Makes sure that the InputStream is closed after the app is
-                // finished using it.
-            } finally {
-                if (is != null) {
-                    is.close();
-                }
-            }//finally
-        }//dlUrl
-
-
-        public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
-            Reader reader = null;
-            reader = new InputStreamReader(stream, "UTF-8");
-            char[] buffer = new char[len];
-            reader.read(buffer);
-            return new String(buffer);
-        }
-
-    }//dlWebTask
-
 
 }// class mapsactivity
