@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        (GlobalVariables.getApplication()).addNewUser("Matti", 23.492534, 63.786543);
+
     }
 
     @Override
