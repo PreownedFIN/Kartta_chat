@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        (GlobalVariables.getApplication()).addNewUser("Matti", 23.492534, 63.786543);
+        //Adding a new user manually (not recommended)
+        ((GlobalVariables)getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
 
     }
 
