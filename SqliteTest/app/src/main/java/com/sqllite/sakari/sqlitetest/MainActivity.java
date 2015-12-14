@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -29,10 +31,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Adding a new user manually (not recommended)
-        ((GlobalVariables)getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
+        //Purge database from earlier values
+        List<User> allUsers = ((GlobalVariables)getApplication()).getAllUsers();
+        for(int i = 0; i < allUsers.size() ;i++){
 
-        Log.d("oma", ((GlobalVariables)getApplication()).getAllUsers().toString());
+            User userToDelete = allUsers.get(i);
+
+            ((GlobalVariables)getApplication()).deleteUser(userToDelete);
+        }
+
+        Log.d("oma", "All users after purge " + allUsers.toString());
+
+        //Adding a new user manually (not recommended)
+                ((GlobalVariables) getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
+
+        Log.d("oma", "All users: " + ((GlobalVariables) getApplication()).getAllUsers().toString());
 
     }
 

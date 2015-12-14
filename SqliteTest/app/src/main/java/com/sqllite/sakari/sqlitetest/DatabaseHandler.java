@@ -17,9 +17,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 10;
     // Database Name
-    private static final String DATABASE_NAME = "contactsManager";
+    private static final String DATABASE_NAME = "userManager";
     // User table name
     private static final String TABLE_USERS = "users";
     // User Table Columns names
@@ -36,10 +36,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USER + " TEXT,"
-                + KEY_LAT + " TEXT" + KEY_LNG + " TEXT" +")";
-        Log.d("oma", CREATE_CONTACTS_TABLE);
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_USER + " TEXT,"
+                + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT" +")";
+        Log.d("oma", "Create users table: " + CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
+        Log.d("oma", "TABLE: " + db.toString());
     }
 
     // Upgrading database
@@ -66,7 +67,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LAT, user.getLat()); // User Lat
         values.put(KEY_LNG, user.getLng()); //User Lng
 
-        Log.d("oma", values.toString());
+        Log.d("oma", "DBHandler adding user: " + values.toString());
 
         // Inserting Row
         db.insert(TABLE_USERS, null, values);
