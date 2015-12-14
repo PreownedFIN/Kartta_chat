@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,16 +17,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 5;
     // Database Name
     private static final String DATABASE_NAME = "contactsManager";
     // User table name
     private static final String TABLE_USERS = "users";
     // User Table Columns names
     private static final String KEY_ID = "id";
-    private static final String KEY_USER = "user";
-    private static final String KEY_LAT = "lat";
-    private static final String KEY_LNG = "lng";
+    private static final String KEY_USER = " user";
+    private static final String KEY_LAT = " lat";
+    private static final String KEY_LNG = " lng";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -37,6 +38,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USER + " TEXT,"
                 + KEY_LAT + " TEXT" + KEY_LNG + " TEXT" +")";
+        Log.d("oma", CREATE_CONTACTS_TABLE);
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -64,6 +66,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LAT, user.getLat()); // User Lat
         values.put(KEY_LNG, user.getLng()); //User Lng
 
+        Log.d("oma", values.toString());
+
         // Inserting Row
         db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
@@ -77,7 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID,
-                        KEY_USER, KEY_LAT, KEY_LNG}, KEY_ID + "=?",
+                        KEY_USER, KEY_LAT, KEY_LNG}, KEY_ID + "=" + id,
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();

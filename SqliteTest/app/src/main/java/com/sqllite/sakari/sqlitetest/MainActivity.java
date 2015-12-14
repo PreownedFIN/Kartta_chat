@@ -5,9 +5,11 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
         //Adding a new user manually (not recommended)
         ((GlobalVariables)getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
+
+        Log.d("oma", ((GlobalVariables)getApplication()).getAllUsers().toString());
 
     }
 
@@ -52,5 +56,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onAddUserClick(View v){
+        ((GlobalVariables)getApplication()).addNewUser("Maija", 24.645366f, 67.127634f);
+
+        TextView tvUser = (TextView) findViewById(R.id.tvUserName);
+
+        String userName = ((GlobalVariables)getApplication()).getUser(0)._userName;
+        Log.d("oma", "Got username: " + userName);
+
+        tvUser.setText(userName);
     }
 }
