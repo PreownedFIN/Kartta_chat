@@ -57,10 +57,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
 
     // Adding new user
-    public void addUser(User user){
+    public int addUser(User user){
 
         //Initializing database connection
         SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT ROWID from " + TABLE_USERS + " order by ROWID DESC limit 1";
+        int newUserId = -1;
 
         ContentValues values = new ContentValues();
         values.put(KEY_USER, user.getUserName()); // Username
@@ -73,6 +75,14 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         db.insert(TABLE_USERS, null, values);
         db.close(); // Closing database connection
 
+        SQLiteDatabase dbRead = this.getReadableDatabase();
+
+        Cursor cursor = dbRead.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()){
+            newUserId = Integer.parseInt(cursor.getLong(0) + "");
+        }
+        Log.d("oma", "newUserId: " + newUserId + "");
+        return newUserId;
     }
 
     // Getting single user
@@ -87,6 +97,11 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor != null) {
             cursor.moveToFirst();
         }
+
+        Log.d("oma", cursor.getString(0));
+        Log.d("oma", cursor.getString(1));
+        Log.d("oma", cursor.getString(2));
+        Log.d("oma", cursor.getString(3));
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1), cursor.getString(2), cursor.getString(3));
@@ -151,7 +166,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             values.put(KEY_LNG, user.getLng());
 
             // updating row
-            return db.update(TABLE_USERS, values, KEY_ID + " = ?",
+            return db.update(TABLE_USERS, values, KEY_ID + "=" + user._id,
                     new String[] { String.valueOf(user.getId()) });
 
     }

@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,7 +46,17 @@ public class MainActivity extends AppCompatActivity {
         //Adding a new user manually (not recommended)
                 ((GlobalVariables) getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
 
-        Log.d("oma", "All users: " + ((GlobalVariables) getApplication()).getAllUsers().toString());
+        //Logging all users
+        allUsers = ((GlobalVariables) getApplication()).getAllUsers();
+        ArrayList<String> userLog = new ArrayList<>();
+
+            userLog.add(allUsers.get(0)._id + "");
+            userLog.add(allUsers.get(0)._userName);
+            userLog.add(allUsers.get(0)._lat);
+            userLog.add(allUsers.get(0)._lng);
+
+
+        Log.d("oma", "All users: " + userLog.toString());
 
     }
 
@@ -76,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tvUser = (TextView) findViewById(R.id.tvUserName);
 
-        String userName = ((GlobalVariables)getApplication()).getUser(0)._userName;
+        String userName = ((GlobalVariables)getApplication()).getUser(15)._userName;
         Log.d("oma", "Got username: " + userName);
 
         tvUser.setText(userName);
