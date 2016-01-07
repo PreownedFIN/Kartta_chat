@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddUserClick(View v){
-        ((GlobalVariables)getApplication()).addNewUser("Maija", 24.645366f, 67.127634f);
+        int maijaId = ((GlobalVariables)getApplication()).addNewUser("Maija", 24.645366f, 67.127634f);
 
         TextView tvUser = (TextView) findViewById(R.id.tvUserName);
 
-        String userName = ((GlobalVariables)getApplication()).getUser(15)._userName;
+        String userName = ((GlobalVariables)getApplication()).getUser(maijaId)._userName;
         Log.d("oma", "Got username: " + userName);
 
         tvUser.setText(userName);

@@ -23,12 +23,14 @@ public class GlobalVariables extends Application{
 
     User user = new User();
 
-    public void addNewUser(String userName, float lat, float lng){
+    public int addNewUser(String userName, float lat, float lng){
 
         DatabaseHandler db = new DatabaseHandler(this);
 
         Log.d("oma", "Adding user: " + userName);
-        db.addUser(new User(userName, lat + "", lng + ""));
+        int newUserId = db.addUser(new User(userName, lat + "", lng + ""));
+
+        return newUserId;
     }
 
     public User getUser(int id){
