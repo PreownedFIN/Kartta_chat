@@ -39,9 +39,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.1926569"
-     inkscape:cx="313.92835"
-     inkscape:cy="767.17029"
+     inkscape:zoom="3.0974253"
+     inkscape:cx="405.22754"
+     inkscape:cy="838.15757"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -49,7 +49,8 @@
      inkscape:window-height="1018"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:object-paths="false" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -74,7 +75,35 @@
        x="136.25504"
        y="237.75218"
        ry="60.32658" />
+    <path
+       style="fill:#999999;fill-opacity:1;stroke:#999999;stroke-width:5;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 244.08657,181.23964 a 90.751182,103.57418 60.826448 0 1 129.37534,-68.66086 90.751182,103.57418 60.826448 0 1 59.43953,113.7604 90.751182,103.57418 60.826448 0 1 -129.37533,68.66087 90.751182,103.57418 60.826448 0 1 -59.43954,-113.76041 z"
+       id="path4241-3"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Puhekupla">
+    <path
+       style="fill:#ffffff;fill-opacity:1;stroke:#999999;stroke-width:5;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 476.57277,202.93934 a 67.691699,95.821695 86.540419 0 1 -128.08003,34.92798 67.691699,95.821695 86.540419 0 1 -43.88168,-89.31891 67.691699,95.821695 86.540419 0 1 128.08002,-34.92797 67.691699,95.821695 86.540419 0 1 43.88169,89.3189 z"
+       id="path4239"
+       inkscape:connector-curvature="0" />
+    <ellipse
+       style="fill:#ffffff;fill-opacity:1;stroke:#999999;stroke-width:5;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path4182"
+       cx="431.09164"
+       cy="125.46132"
+       rx="99.554863"
+       ry="74.054863" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Kartta">
     <a
+       style=""
        id="a4231">
       <g
          id="g4224">
@@ -209,28 +238,5 @@
        height="219.90604"
        x="406.67392"
        y="327.88123" />
-    <ellipse
-       style="fill:#ffffff;fill-opacity:1;stroke:#ddffff;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4239"
-       cx="582.27094"
-       cy="85.177994"
-       rx="88.574799"
-       ry="92.482513"
-       transform="matrix(0.91059044,0.41330988,-0.42701723,0.90424349,0,0)" />
-    <ellipse
-       style="fill:#999999;fill-opacity:1;stroke:#ddffff;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4241"
-       ry="92.860901"
-       rx="65.898308"
-       cy="468.22974"
-       cx="-383.82141"
-       transform="matrix(0.06186182,-0.99808472,0.99947536,-0.03238825,0,0)" />
-    <ellipse
-       style="fill:#ffffff;fill-opacity:1;stroke:#999999;stroke-width:0;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path4182"
-       cx="499.78119"
-       cy="293.90405"
-       rx="99.554863"
-       ry="74.054863" />
   </g>
 </svg>
