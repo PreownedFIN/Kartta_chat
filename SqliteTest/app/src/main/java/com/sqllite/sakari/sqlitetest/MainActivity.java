@@ -32,29 +32,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Purge database from earlier values
-        List<User> allUsers = ((GlobalVariables)getApplication()).getAllUsers();
-        for(int i = 0; i < allUsers.size() ;i++){
-
-            User userToDelete = allUsers.get(i);
-
-            ((GlobalVariables)getApplication()).deleteUser(userToDelete);
-        }
-
-        Log.d("oma", "All users after purge " + allUsers.toString());
-
         //Adding a new user manually (not recommended)
                 ((GlobalVariables) getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
 
         //Logging all users
-        allUsers = ((GlobalVariables) getApplication()).getAllUsers();
+        List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
         ArrayList<String> userLog = new ArrayList<>();
 
-            userLog.add(allUsers.get(0)._id + "");
-            userLog.add(allUsers.get(0)._userName);
-            userLog.add(allUsers.get(0)._lat);
-            userLog.add(allUsers.get(0)._lng);
+        for (int i = 0; i <= allUsers.size(); i++) {
 
+            userLog.add(allUsers.get(i)._id + "");
+            userLog.add(allUsers.get(i)._userName);
+            userLog.add(allUsers.get(i)._lat);
+            userLog.add(allUsers.get(i)._lng);
+
+        }
 
         Log.d("oma", "All users: " + userLog.toString());
 
