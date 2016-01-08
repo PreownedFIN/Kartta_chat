@@ -73,4 +73,15 @@ public class GlobalVariables extends Application{
         db.deleteUser(user);
     }
 
+    public void logUser(int id){
+        User targetUser;
+        DatabaseHandler db = new DatabaseHandler(this);
+
+        targetUser = db.getUser(id);
+
+        Log.d("oma", "Käyttäjänimi: " + targetUser._userName);
+        Log.d("oma", "Lat: " + targetUser._lat);
+        Log.d("oma", "Lng: " + targetUser._lng);
+    }
+
 }

@@ -9,10 +9,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
         ArrayList<String> userLog = new ArrayList<>();
 
-        for (int i = 0; i <= allUsers.size(); i++) {
+        for (int i = 0; i < allUsers.size(); i++) {
 
             userLog.add(allUsers.get(i)._id + "");
             userLog.add(allUsers.get(i)._userName);
@@ -50,6 +55,16 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("oma", "All users: " + userLog.toString());
 
+        Random r = new Random();
+
+        TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
+        TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
+
+        float randLat = -90 + 90 * r.nextFloat();
+        float randLng = -180 + 180 * r.nextFloat();
+
+        tvLat.setText(randLat + "");
+        tvLng.setText(randLng + "");
     }
 
     @Override
@@ -75,13 +90,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onAddUserClick(View v){
-        int maijaId = ((GlobalVariables)getApplication()).addNewUser("Maija", 24.645366f, 67.127634f);
 
-        TextView tvUser = (TextView) findViewById(R.id.tvUserName);
+        EditText etUserName = (EditText) findViewById(R.id.etUserName);
+        TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
+        TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
 
-        String userName = ((GlobalVariables)getApplication()).getUser(maijaId)._userName;
-        Log.d("oma", "Got username: " + userName);
+        String userName = etUserName.getText().toString();
+        float userLat = Float.parseFloat(tvLat.getText().toString());
+        float userLng = Float.parseFloat(tvLng.getText().toString());
 
-        tvUser.setText(userName);
+        if (!userName.equals("")){
+            int newUserId = ((GlobalVariables)getApplication()).addNewUser(userName, userLat, userLng);
+
+            TextView tvUser = (TextView) findViewById(R.id.tvUserName);
+
+            //Get the name of the user from GlobalVariables to make sure it is added to
+            //the database
+            String dbUserName = ((GlobalVariables)getApplication()).getUser(newUserId)._userName;
+            ((GlobalVariables) getApplication()).logUser(newUserId);
+
+            tvUser.setText(dbUserName);
+        }else{
+            Toast toast = Toast.makeText(this, "Käyttäjänimi ei voi olla tyhjä", Toast.LENGTH_LONG);
+            toast.show();
+        }
+    }public void onClearDbClick(View v){
+
+        List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
+
+        for (int i = 0; i < allUsers.size(); i++) {
+
+            ((GlobalVariables)getApplication()).deleteUser(((GlobalVariables)getApplication()).getUser(allUsers.get(i)._id));
+
+        }
     }
 }

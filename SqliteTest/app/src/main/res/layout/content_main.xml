@@ -23,9 +23,69 @@
         android:layout_height="wrap_content"
         android:text="@string/add_user"
         android:id="@+id/btnAddUser"
+        android:onClick="onAddUserClick"
+        android:layout_below="@+id/etUserName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="56dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etUserName"
         android:layout_below="@+id/tvUserName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp"
-        android:onClick="onAddUserClick" />
+        android:hint="Käyttäjänimi" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Lat"
+        android:id="@+id/tvLat"
+        android:layout_below="@+id/etUserName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Lng"
+        android:id="@+id/tvLng"
+        android:layout_below="@+id/tvLat"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/tvLngText"
+        android:layout_below="@+id/tvLatText"
+        android:layout_toRightOf="@+id/tvUserName" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/tvLatText"
+        android:layout_below="@+id/etUserName"
+        android:layout_alignLeft="@+id/tvLngText"
+        android:layout_alignStart="@+id/tvLngText" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clear Database"
+        android:id="@+id/btnClearDb"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="83dp"
+        android:onClick="onClearDbClick"
+        android:nestedScrollingEnabled="false" />
 </RelativeLayout>
