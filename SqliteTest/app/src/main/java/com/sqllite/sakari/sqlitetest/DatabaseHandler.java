@@ -20,13 +20,18 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final int DATABASE_VERSION = 10;
     // Database Name
     private static final String DATABASE_NAME = "userManager";
-    // User table name
+    //table names
     private static final String TABLE_USERS = "users";
-    // User Table Columns names
+    private static final String TABLE_LOCATIONS = "locations";
+    // Common columns names
     private static final String KEY_ID = "id";
+    //USERS table column names
     private static final String KEY_USER = " user";
-    private static final String KEY_LAT = " lat";
-    private static final String KEY_LNG = " lng";
+    private static final String KEY_LOCATION = "location";
+    //LOCATIONS table column names
+    private static final String KEY_USERID = "userId";
+    private static final String KEY_LAT = "lat";
+    private static final String KEY_LNG = "lng";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,11 +40,19 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
+        //Build users table statement
+        String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_USER + " TEXT,"
-                + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT" +")";
-        Log.d("oma", "Create users table: " + CREATE_CONTACTS_TABLE);
-        db.execSQL(CREATE_CONTACTS_TABLE);
+                + KEY_LOCATION + " TEXT " +")";
+        //Build locations table statement
+        String CREATE_LOCATIONS_TABLE = "CREATE TABLE " + TABLE_LOCATIONS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_USERID + " TEXT,"
+                + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT " + ")";
+        Log.d("oma", "Create users table: " + CREATE_USERS_TABLE);
+        Log.d("oma", "Create users table: " + CREATE_LOCATIONS_TABLE);
+
+        db.execSQL(CREATE_USERS_TABLE);
+        db.execSQL(CREATE_LOCATIONS_TABLE);
         Log.d("oma", "TABLE: " + db.toString());
     }
 
@@ -48,6 +61,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
 
         // Create tables again
         onCreate(db);
@@ -55,6 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     /*------------- All CRUD (Create, Read, Update, Delete) operations -------------*/
 
+    /*---USER---*/
 
     // Adding new user
     public int addUser(User user){
@@ -66,8 +81,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         ContentValues values = new ContentValues();
         values.put(KEY_USER, user.getUserName()); // Username
-        values.put(KEY_LAT, user.getLat()); // User Lat
-        values.put(KEY_LNG, user.getLng()); //User Lng
 
         Log.d("oma", "DBHandler adding user: " + values.toString());
 
@@ -81,6 +94,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         if (cursor != null && cursor.moveToFirst()){
             newUserId = Integer.parseInt(cursor.getLong(0) + "");
         }
+
         Log.d("oma", "newUserId: " + newUserId + "");
         return newUserId;
     }
@@ -89,9 +103,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public User getUser(int id){
 
         //Initializing database connection
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.d("oma", "UserId databasehandlerissa: " + id);
+        /*Log.d("oma", "UserId databasehandlerissa: " + id);*/
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID,
                         KEY_USER, KEY_LAT, KEY_LNG}, KEY_ID + " = ?",
@@ -100,13 +114,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             cursor.moveToFirst();
         }
 
-        Log.d("oma", cursor.getString(0));
-        Log.d("oma", cursor.getString(1));
-        Log.d("oma", cursor.getString(2));
-        Log.d("oma", cursor.getString(3));
-
         User user = new User(Integer.parseInt(cursor.getString(0)),
-                cursor.getString(1), cursor.getString(2), cursor.getString(3));
+                cursor.getString(1));
+
         // return user
         return user;
 
@@ -129,8 +139,6 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 User user = new User();
                 user.setId(Integer.parseInt(cursor.getString(0)));
                 user.setUserName(cursor.getString(1));
-                user.setLat(cursor.getString(2));
-                user.setLng(cursor.getString(3));
                 // Adding user to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -164,12 +172,10 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
             ContentValues values = new ContentValues();
             values.put(KEY_USER, user.getUserName());
-            values.put(KEY_LAT, user.getLat());
-            values.put(KEY_LNG, user.getLng());
 
             // updating row
-            return db.update(TABLE_USERS, values, KEY_ID + "=" + user._id,
-                    new String[] { String.valueOf(user.getId()) });
+            return db.update(TABLE_USERS, values, KEY_ID + "=?",
+                    new String[]{String.valueOf(user.getId())});
 
     }
 
@@ -179,9 +185,100 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         //Initializing database connection
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_USERS, KEY_ID + " = ?",
-                new String[] { String.valueOf(user.getId()) });
+                new String[]{String.valueOf(user.getId())});
         db.close();
+
+        //Log.d("oma", "All users cleared");
 
     }
 
+    /*---/USER---*/
+    /*---LOCATIONS---*/
+
+    //Create a new location and assign it for a single user
+    public long newLocation(Location location, User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long newLocationId;
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_USERID, user.getId());
+        values.put(KEY_LAT, location.getLat());
+        values.put(KEY_LNG, location.getLat());
+
+        newLocationId = db.insert(TABLE_LOCATIONS, null, values);
+
+        return newLocationId;
+    }
+
+    //Get location by location id
+    public Location getLocationByLId(long locationId){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_LOCATIONS + " WHERE "
+                + KEY_ID + " = " + locationId;
+
+        Log.d("oma", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null){
+            c.moveToFirst();
+        }
+
+        Location returnLoc = new Location();
+        returnLoc.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        returnLoc.setUserId(c.getInt(c.getColumnIndex(KEY_USERID)));
+        returnLoc.setLat(c.getInt(c.getColumnIndex(KEY_LAT)));
+        returnLoc.setLng(c.getInt(c.getColumnIndex(KEY_LNG)));
+
+        return returnLoc;
+    }
+
+    //Get all locations by user id
+    public List<Location> getLocationByUser(User user){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_LOCATIONS + " WHERE "
+                + KEY_USERID + " = " + user._id;
+
+        Cursor c = db.rawQuery(selectQuery, null);
+        List<Location> locationList = new ArrayList<>();
+
+        if (c.moveToFirst()) {
+            do {
+                Location location = new Location();
+                location.setId(Integer.parseInt(c.getString(0)));
+                location.setUserId(Integer.parseInt(c.getString(1)));
+                // Adding location to list
+                locationList.add(location);
+            } while (c.moveToNext());
+        }
+
+        return locationList;
+    }
+
+    //Get user's latest location
+    public Location getUserLastLoc(User user){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_LOCATIONS + " WHERE "
+                + KEY_USERID + " = " + user.getId() + " ORDER BY " + KEY_ID + " DESC limit 1";
+
+        Log.d("oma", selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null){
+            c.moveToFirst();
+        }
+
+        Location returnLoc = new Location();
+        returnLoc.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+        returnLoc.setUserId(c.getInt(c.getColumnIndex(KEY_USERID)));
+        returnLoc.setLat(c.getInt(c.getColumnIndex(KEY_LAT)));
+        returnLoc.setLng(c.getInt(c.getColumnIndex(KEY_LNG)));
+
+        return returnLoc;
+    }
+    /*---/LOCATIONS---*/
 }

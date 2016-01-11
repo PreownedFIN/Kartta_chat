@@ -1,5 +1,6 @@
 package com.sqllite.sakari.sqlitetest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Adding a new user manually (not recommended)
-                ((GlobalVariables) getApplication()).addNewUser("Matti", 23.492533f, 63.786543f);
+                ((GlobalVariables) getApplication()).addNewUser("Matti");
 
         //Logging all users
         List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
@@ -48,23 +49,12 @@ public class MainActivity extends AppCompatActivity {
 
             userLog.add(allUsers.get(i)._id + "");
             userLog.add(allUsers.get(i)._userName);
-            userLog.add(allUsers.get(i)._lat);
-            userLog.add(allUsers.get(i)._lng);
 
         }
 
         Log.d("oma", "All users: " + userLog.toString());
 
-        Random r = new Random();
-
-        TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
-        TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
-
-        float randLat = -90 + 90 * r.nextFloat();
-        float randLng = -180 + 180 * r.nextFloat();
-
-        tvLat.setText(randLat + "");
-        tvLng.setText(randLng + "");
+        setRandLatLng();
     }
 
     @Override
@@ -91,37 +81,75 @@ public class MainActivity extends AppCompatActivity {
 
     public void onAddUserClick(View v){
 
+        //Serialize layout objects
         EditText etUserName = (EditText) findViewById(R.id.etUserName);
         TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
         TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
 
+        //Get information to enter to the database
         String userName = etUserName.getText().toString();
         float userLat = Float.parseFloat(tvLat.getText().toString());
         float userLng = Float.parseFloat(tvLng.getText().toString());
 
+        Location userLocation = new Location(userLat, userLng);
+
+        GlobalVariables gv = new GlobalVariables();
+
+        //Check if userName-field is empty
         if (!userName.equals("")){
-            int newUserId = ((GlobalVariables)getApplication()).addNewUser(userName, userLat, userLng);
+
+            //Add user to database and receive the userId as return
+            int newUserId = ((GlobalVariables)getApplication()).addNewUser(userName);
+
+            ((GlobalVariables)getApplication()).newLocation(new Location(userLat, userLng),
+                    gv.getUser(newUserId));
 
             TextView tvUser = (TextView) findViewById(R.id.tvUserName);
 
-            //Get the name of the user from GlobalVariables to make sure it is added to
-            //the database
+            //Get the name of the user from GlobalVariables to make sure it has been
+            //added to the database
             String dbUserName = ((GlobalVariables)getApplication()).getUser(newUserId)._userName;
             ((GlobalVariables) getApplication()).logUser(newUserId);
 
             tvUser.setText(dbUserName);
+
+            setRandLatLng();
         }else{
-            Toast toast = Toast.makeText(this, "Käyttäjänimi ei voi olla tyhjä", Toast.LENGTH_LONG);
+            //Show empty username toast when username field is empty
+            Toast toast = Toast.makeText(this, R.string.error_empty_username, Toast.LENGTH_LONG);
             toast.show();
         }
-    }public void onClearDbClick(View v){
+    }
 
+    public void onClearDbClick(View v){
+
+        //Get allUsers list for deletion
         List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
 
         for (int i = 0; i < allUsers.size(); i++) {
-
+            //Delete all users in the allUsers list
             ((GlobalVariables)getApplication()).deleteUser(((GlobalVariables)getApplication()).getUser(allUsers.get(i)._id));
-
         }
+    }
+
+    public void onBtnBrowseDb(View v){
+        //Initialize and start intent for DbBrowser activity
+        Intent intent = new Intent(this, DbBrowser.class);
+        startActivity(intent);
+    }
+
+    //Set random lat and lng values for the textViews where they are extracted
+    //for database entry
+    private void setRandLatLng(){
+        Random r = new Random();
+
+        TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
+        TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
+
+        float randLat = -90 + 90 * r.nextFloat();
+        float randLng = -180 + 180 * r.nextFloat();
+
+        tvLat.setText(randLat + "");
+        tvLng.setText(randLng + "");
     }
 }

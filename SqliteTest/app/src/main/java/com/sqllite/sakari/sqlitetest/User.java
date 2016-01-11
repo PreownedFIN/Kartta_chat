@@ -7,22 +7,17 @@ public class User {
 
     int _id;
     String _userName;
-    String _lat;
-    String _lng;
+    Location _location;
 
     public User(){}
 
-    public User(int id, String userName, String lat, String lng){
+    public User(int id, String userName){
         this._id = id;
         this._userName = userName;
-        this._lat = lat;
-        this._lng = lng;
     }
 
-    public User(String userName, String lat, String lng){
+    public User(String userName){
         this._userName = userName;
-        this._lat = lat;
-        this._lng = lng;
     }
 
     public int getId() {
@@ -39,22 +34,6 @@ public class User {
 
     public void setUserName(String userName) {
         this._userName = userName;
-    }
-
-    public String getLat() {
-        return this._lat;
-    }
-
-    public void setLat(String lat) {
-        this._lat = lat;
-    }
-
-    public String getLng() {
-        return this._lng;
-    }
-
-    public void setLng(String lng) {
-        this._lng = lng;
     }
 
 }
