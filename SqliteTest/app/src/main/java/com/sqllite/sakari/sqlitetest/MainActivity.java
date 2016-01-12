@@ -22,6 +22,8 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    GlobalVariables gv = new GlobalVariables(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,10 +41,10 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //Adding a new user manually (not recommended)
-                ((GlobalVariables) getApplication()).addNewUser("Matti");
+                gv.addNewUser("Matti");
 
         //Logging all users
-        List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
+        List<User> allUsers = gv.getAllUsers();
         ArrayList<String> userLog = new ArrayList<>();
 
         for (int i = 0; i < allUsers.size(); i++) {
@@ -93,23 +95,21 @@ public class MainActivity extends AppCompatActivity {
 
         Location userLocation = new Location(userLat, userLng);
 
-        GlobalVariables gv = new GlobalVariables();
-
         //Check if userName-field is empty
         if (!userName.equals("")){
 
             //Add user to database and receive the userId as return
-            int newUserId = ((GlobalVariables)getApplication()).addNewUser(userName);
+            int newUserId = gv.addNewUser(userName);
 
-            ((GlobalVariables)getApplication()).newLocation(new Location(userLat, userLng),
+            gv.newLocation(userLocation,
                     gv.getUser(newUserId));
 
             TextView tvUser = (TextView) findViewById(R.id.tvUserName);
 
             //Get the name of the user from GlobalVariables to make sure it has been
             //added to the database
-            String dbUserName = ((GlobalVariables)getApplication()).getUser(newUserId)._userName;
-            ((GlobalVariables) getApplication()).logUser(newUserId);
+            String dbUserName = gv.getUser(newUserId).getUserName();
+            gv.logUser(newUserId);
 
             tvUser.setText(dbUserName);
 
@@ -124,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
     public void onClearDbClick(View v){
 
         //Get allUsers list for deletion
-        List<User> allUsers = ((GlobalVariables) getApplication()).getAllUsers();
+        List<User> allUsers = gv.getAllUsers();
 
         for (int i = 0; i < allUsers.size(); i++) {
             //Delete all users in the allUsers list
-            ((GlobalVariables)getApplication()).deleteUser(((GlobalVariables)getApplication()).getUser(allUsers.get(i)._id));
+            gv.deleteUser(gv.getUser(allUsers.get(i)._id));
         }
     }
 
@@ -136,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
         //Initialize and start intent for DbBrowser activity
         Intent intent = new Intent(this, DbBrowser.class);
         startActivity(intent);
+    }
+
+    public void onBtnLocClick(View v){
+        Toast.makeText(this, "Browse locations", Toast.LENGTH_LONG).show();
+    }
+
+    public void onBtnGroupClick(View v){
+        Toast.makeText(this, "Browse groups", Toast.LENGTH_LONG).show();
     }
 
     //Set random lat and lng values for the textViews where they are extracted

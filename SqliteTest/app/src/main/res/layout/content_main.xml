@@ -24,10 +24,9 @@
         android:text="@string/add_user"
         android:id="@+id/btnAddUser"
         android:onClick="onAddUserClick"
-        android:layout_below="@+id/etUserName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="56dp" />
+        android:layout_alignTop="@+id/tvLatText"
+        android:layout_alignRight="@+id/etUserName"
+        android:layout_alignEnd="@+id/etUserName" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -38,7 +37,7 @@
         android:layout_below="@+id/tvUserName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="Käyttäjänimi" />
+        android:hint="@string/username" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,37 +64,93 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/tvLngText"
+        android:text="0.00000"
         android:layout_below="@+id/tvLatText"
-        android:layout_toRightOf="@+id/tvUserName" />
+        android:layout_alignLeft="@+id/tvLatText"
+        android:layout_alignStart="@+id/tvLatText" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/tvLatText"
+        android:text="0.00000"
         android:layout_below="@+id/etUserName"
-        android:layout_alignLeft="@+id/tvLngText"
-        android:layout_alignStart="@+id/tvLngText" />
+        android:layout_toRightOf="@+id/tvLng"
+        android:layout_toEndOf="@+id/tvLng" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/clear_database"
         android:id="@+id/btnClearDb"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="83dp"
         android:onClick="onClearDbClick"
-        android:nestedScrollingEnabled="false" />
+        android:nestedScrollingEnabled="false"
+        android:layout_below="@+id/btnBrowseLocations"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/browse_database"
+        android:text="@string/browse_user_database"
         android:id="@+id/btnBrowseDb"
         android:onClick="onBtnBrowseDb"
-        android:layout_above="@+id/btnClearDb"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="53dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/etGroupName"
+        android:layout_below="@+id/btnAddUser"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnAddUser"
+        android:layout_alignEnd="@+id/btnAddUser"
+        android:hint="@string/hint_group_name" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/etGroupPWord"
+        android:layout_below="@+id/etGroupName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:hint="@string/hint_group_pword" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_group"
+        android:id="@+id/btnAddGroup"
+        android:layout_below="@+id/etGroupPWord"
+        android:layout_alignRight="@+id/etGroupPWord"
+        android:layout_alignEnd="@+id/etGroupPWord"
+        android:onClick="onAddGroupClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/browse_locations_database"
+        android:id="@+id/btnBrowseLocations"
+        android:layout_above="@+id/btnBrowseDb"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onBtnLocClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/browse_group_database"
+        android:id="@+id/btnBrowseGroups"
+        android:layout_above="@+id/btnBrowseLocations"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="onBtnGroupClick" />
+
 </RelativeLayout>

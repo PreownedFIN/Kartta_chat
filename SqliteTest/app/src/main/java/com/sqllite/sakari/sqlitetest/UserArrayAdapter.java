@@ -18,15 +18,15 @@ import java.util.List;
 public class UserArrayAdapter extends ArrayAdapter<User> {
     private final Context context;
     private final List<User> user;
+    private final List<Location> location;
 
     //Constructor for the class
-    public UserArrayAdapter(Context context, List<User> userList){
+    public UserArrayAdapter(Context context, List<User> userList, List<Location> locationList){
         super(context, -1, userList);
         this.context = context;
         this.user = userList;
+        this.location = locationList;
     }
-
-    GlobalVariables gv;
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent){
@@ -59,14 +59,17 @@ public class UserArrayAdapter extends ArrayAdapter<User> {
 
         //Get the user object that is in the allUsers list in [position]
         User user = this.user.get(position);
-        Location userLocation;
+        Location location = this.location.get(position);
+
+        //TODO modify to receive all location data from caller and get locations from there
+        //Location userLocation = gv.locationLastByUser(user);
 
         //Set parameters for holder object, REMEMBER to use + "" trick
         //to make sure the parameters are stored as Strings
-        holder.tvId.setText(user._id + "");
-        holder.tvUserName.setText(user._userName + "");
-        holder.tvLat.setText(gv.locationLastByUser(user).getLat() + "");
-        holder.tvLng.setText(gv.locationLastByUser(user).getLng() + "");
+        holder.tvId.setText(user.getId() + "");
+        holder.tvUserName.setText(user.getUserName() + "");
+        holder.tvLat.setText(location.getLat() + "");
+        holder.tvLng.setText(location.getLng() + "");
 
         return rowView;
     }

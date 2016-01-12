@@ -15,6 +15,8 @@ import java.util.List;
 
 public class DbBrowser extends AppCompatActivity {
 
+    GlobalVariables gv = new GlobalVariables(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,14 +35,22 @@ public class DbBrowser extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Get all users
-        List<User> userList = ((GlobalVariables) getApplication()).getAllUsers();
+        List<User> userList = gv.getAllUsers();
+        List<Location> locationList = new ArrayList<>();
+
+        for (int i = 0; i < userList.size(); i++){
+            Location loc = gv.locationLastByUser(userList.get(i));
+            locationList.add(loc);
+            Log.d("oma", "Locations in DBBrowser: " + loc.getUserId() +
+            " Lat: " + loc.getLat() + " Lng: " + loc.getLng());
+        }
 
         //Get listView to which attach the adapter
         ListView dbList = (ListView)findViewById(R.id.lvDbObjects);
 
             //Log.d("oma", "ArrayAdapteriin menevä merkkijono: " + userList);
         //Initialize UserArrayAdapter
-        UserArrayAdapter adapter = new UserArrayAdapter(this, userList);
+        UserArrayAdapter adapter = new UserArrayAdapter(this, userList, locationList);
 
         //Assigning adapter for ListView
         dbList.setAdapter(adapter);

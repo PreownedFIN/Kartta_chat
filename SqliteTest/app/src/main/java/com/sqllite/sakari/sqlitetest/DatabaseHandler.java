@@ -23,15 +23,19 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     //table names
     private static final String TABLE_USERS = "users";
     private static final String TABLE_LOCATIONS = "locations";
+    private static final String TABLE_GROUPS = "groups";
     // Common columns names
     private static final String KEY_ID = "id";
     //USERS table column names
-    private static final String KEY_USER = " user";
+    private static final String KEY_USER = "user";
     private static final String KEY_LOCATION = "location";
     //LOCATIONS table column names
     private static final String KEY_USERID = "userId";
     private static final String KEY_LAT = "lat";
     private static final String KEY_LNG = "lng";
+    //GROUPS table column names
+    private static final String KEY_GROUPNAME = "groupname";
+    private static final String KEY_GROUPPWORD = "grouppword";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,12 +46,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase db) {
         //Build users table statement
         String CREATE_USERS_TABLE = "CREATE TABLE " + TABLE_USERS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_USER + " TEXT,"
-                + KEY_LOCATION + " TEXT " +")";
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + KEY_USER + " TEXT, "
+                + KEY_LOCATION + " TEXT" +")";
         //Build locations table statement
         String CREATE_LOCATIONS_TABLE = "CREATE TABLE " + TABLE_LOCATIONS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + KEY_USERID + " TEXT,"
-                + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT " + ")";
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + KEY_USERID + " TEXT, "
+                + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT" + ")";
+        String CREATE_GROUPS_TABLE = "CREATE TABLE " + TABLE_GROUPS + "("
+                + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + KEY_GROUPNAME + " TEXT, "
+                + KEY_GROUPPWORD + " TEXT, " + ")";
         Log.d("oma", "Create users table: " + CREATE_USERS_TABLE);
         Log.d("oma", "Create users table: " + CREATE_LOCATIONS_TABLE);
 
@@ -108,7 +115,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         /*Log.d("oma", "UserId databasehandlerissa: " + id);*/
 
         Cursor cursor = db.query(TABLE_USERS, new String[]{KEY_ID,
-                        KEY_USER, KEY_LAT, KEY_LNG}, KEY_ID + " = ?",
+                        KEY_USER}, KEY_ID + " = ?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
@@ -116,6 +123,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         User user = new User(Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1));
+
+        cursor.close();
 
         // return user
         return user;
@@ -203,7 +212,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(KEY_USERID, user.getId());
         values.put(KEY_LAT, location.getLat());
-        values.put(KEY_LNG, location.getLat());
+        values.put(KEY_LNG, location.getLng());
 
         newLocationId = db.insert(TABLE_LOCATIONS, null, values);
 
@@ -239,7 +248,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLE_LOCATIONS + " WHERE "
-                + KEY_USERID + " = " + user._id;
+                + KEY_USERID + " = " + user.getId();
 
         Cursor c = db.rawQuery(selectQuery, null);
         List<Location> locationList = new ArrayList<>();
@@ -259,12 +268,12 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     //Get user's latest location
     public Location getUserLastLoc(User user){
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase();
 
         String selectQuery = "SELECT * FROM " + TABLE_LOCATIONS + " WHERE "
                 + KEY_USERID + " = " + user.getId() + " ORDER BY " + KEY_ID + " DESC limit 1";
 
-        Log.d("oma", selectQuery);
+        //Log.d("oma", selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
@@ -275,10 +284,20 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         Location returnLoc = new Location();
         returnLoc.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         returnLoc.setUserId(c.getInt(c.getColumnIndex(KEY_USERID)));
-        returnLoc.setLat(c.getInt(c.getColumnIndex(KEY_LAT)));
-        returnLoc.setLng(c.getInt(c.getColumnIndex(KEY_LNG)));
+        returnLoc.setLat(c.getFloat(c.getColumnIndex(KEY_LAT)));
+        returnLoc.setLng(c.getFloat(c.getColumnIndex(KEY_LNG)));
 
         return returnLoc;
+    }
+
+    public void deleteLocationsOfUser(User user){
+
+        //Initializing database connection
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_LOCATIONS, KEY_USERID + " = ?",
+                new String[]{String.valueOf(user.getId())});
+        db.close();
+
     }
     /*---/LOCATIONS---*/
 }

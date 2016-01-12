@@ -4,6 +4,12 @@
     <string name="add_user">Add user</string>
     <string name="clear_database">Clear database</string>
     <string name="title_activity_db_browser">DbBrowser</string>
-    <string name="browse_database">Browse database</string>
+    <string name="browse_user_database">user database</string>
     <string name="error_empty_username">Username can\'t be empty</string>
+    <string name="hint_group_name">Group name</string>
+    <string name="hint_group_pword">Group password</string>
+    <string name="add_group">Add group</string>
+    <string name="username">Username</string>
+    <string name="browse_locations_database">locations database</string>
+    <string name="browse_group_database">group database</string>
 </resources>
