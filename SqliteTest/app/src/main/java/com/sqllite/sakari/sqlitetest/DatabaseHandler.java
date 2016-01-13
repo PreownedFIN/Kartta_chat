@@ -69,6 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GROUPS);
 
         // Create tables again
         onCreate(db);

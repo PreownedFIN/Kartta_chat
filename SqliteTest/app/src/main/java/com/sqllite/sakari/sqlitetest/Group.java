@@ -6,6 +6,23 @@ import java.util.List;
  * Created by Sakari on 09.01.2016.
  */
 public class Group {
+
+    public Group(){}
+
+    public Group(String groupName, String groupPassWord, User creator){
+        this.groupName = groupName;
+        this.groupPassWord = groupPassWord;
+        this.creator = creator;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
     public String getGroupName() {
         return groupName;
     }
@@ -30,7 +47,16 @@ public class Group {
         this.users = users;
     }
 
+    public void addUser(User user){
+        this.users.add(this.users.size(), user);
+    }
+
+    public void removeUser(User user){
+        this.users.remove(user);
+    }
+
     String groupName;
     String groupPassWord;
+    User creator;
     List<User> users;
 }
