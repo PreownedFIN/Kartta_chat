@@ -1,5 +1,6 @@
 package com.sqllite.sakari.sqlitetest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,13 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbBrowser extends AppCompatActivity {
+public class UserBrowserActivity extends AppCompatActivity {
 
     GlobalVariables gv = new GlobalVariables(this);
 
@@ -35,7 +37,7 @@ public class DbBrowser extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Get all users
-        List<User> userList = gv.getAllUsers();
+        final List<User> userList = gv.getAllUsers();
         List<Location> locationList = new ArrayList<>();
 
         for (int i = 0; i < userList.size(); i++){
@@ -46,14 +48,30 @@ public class DbBrowser extends AppCompatActivity {
         }
 
         //Get listView to which attach the adapter
-        ListView dbList = (ListView)findViewById(R.id.lvDbObjects);
+        ListView lvUserList = (ListView)findViewById(R.id.lvDbObjects);
 
             //Log.d("oma", "ArrayAdapteriin menevä merkkijono: " + userList);
         //Initialize UserArrayAdapter
         UserArrayAdapter adapter = new UserArrayAdapter(this, userList, locationList);
 
         //Assigning adapter for ListView
-        dbList.setAdapter(adapter);
+        lvUserList.setAdapter(adapter);
+
+        //Add click listener to listview that retrieves the user of the clicked element,
+        //opens LocBrowserActivity and passes the userId of user to the activity
+        lvUserList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(UserBrowserActivity.this, LocBrowserActivity.class);
+                //Get user from the clicked position and get the its userId
+                User user = (User) adapterView.getItemAtPosition(position);
+                int userId = user.getId();
+                //Attach the int userId to the intent
+                intent.putExtra("user", userId);
+                //Start activity
+                startActivity(intent);
+            }
+        });
     }
 
 }

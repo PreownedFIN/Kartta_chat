@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -133,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnBrowseDb(View v){
-        //Initialize and start intent for DbBrowser activity
-        Intent intent = new Intent(this, DbBrowser.class);
+        //Initialize and start intent for UserBrowserActivity activity
+        Intent intent = new Intent(this, UserBrowserActivity.class);
         startActivity(intent);
     }
 

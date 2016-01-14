@@ -19,13 +19,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DbBrowser"
+            android:name=".UserBrowserActivity"
             android:label="@string/title_activity_db_browser"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.sqllite.sakari.sqlitetest.MainActivity" />
+        </activity>
+        <activity
+            android:name=".LocBrowserActivity"
+            android:label="@string/title_activity_loc_browser"
+            android:parentActivityName=".UserBrowserActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sqllite.sakari.sqlitetest.UserBrowserActivity" />
         </activity>
     </application>
 

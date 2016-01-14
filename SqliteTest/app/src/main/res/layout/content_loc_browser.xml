@@ -9,14 +9,25 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UserBrowserActivity"
-    tools:showIn="@layout/activity_db_browser">
+    tools:context="com.sqllite.sakari.sqlitetest.LocBrowserActivity"
+    tools:showIn="@layout/activity_loc_browser">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="userName"
+        android:id="@+id/tvUserName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/lvDbObjects"
+        android:id="@+id/lvLocations"
+        android:layout_below="@+id/tvUserName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true" />
+        android:layout_marginTop="36dp" />
 </RelativeLayout>
