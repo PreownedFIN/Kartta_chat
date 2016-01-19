@@ -116,11 +116,17 @@ public class GlobalVariables{
         return returnLoc;
     }
 
-    public List<Location> locationByUser(User user){
+    public List<Location> locationsByUser(User user){
 
         DatabaseHandler db = new DatabaseHandler(context);
 
         List<Location> userLocationList = db.getLocationByUser(user);
+
+        if (userLocationList == null){
+            userLocationList.add(new Location(10.00000f, 10.00000f));
+        }
+        Log.d("oma", "Got location list by user's id");
+        Log.d("oma", userLocationList.get(0).getLat() + " " + userLocationList.get(0).getLng());
 
         return userLocationList;
     }

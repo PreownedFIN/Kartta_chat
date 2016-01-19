@@ -36,6 +36,8 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     //GROUPS table column names
     private static final String KEY_GROUPNAME = "groupname";
     private static final String KEY_GROUPPWORD = "grouppword";
+    private static final String KEY_GROUPCREATOR = "grouppword";
+    private static final String KEY_GROUPUSERS = "grouppword";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -203,6 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     }
 
     /*---/USER---*/
+
     /*---LOCATIONS---*/
 
     //Create a new location and assign it for a single user
@@ -256,9 +259,13 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
         if (c.moveToFirst()) {
             do {
+                Log.d("oma", "LocFromDB cursor: " + c.getString(2) + " " + c.getString(3));
+
                 Location location = new Location();
                 location.setId(Integer.parseInt(c.getString(0)));
                 location.setUserId(Integer.parseInt(c.getString(1)));
+                location.setLat(Float.parseFloat(c.getString(2)));
+                location.setLng(Float.parseFloat(c.getString(3)));
                 // Adding location to list
                 locationList.add(location);
             } while (c.moveToNext());
@@ -301,4 +308,15 @@ public class DatabaseHandler extends SQLiteOpenHelper{
 
     }
     /*---/LOCATIONS---*/
+
+    /*---GROUPS---*/
+    public void newGroup(Group newGroup){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_GROUPNAME, newGroup.getGroupName());
+        values.put(KEY_GROUPPWORD, newGroup.getGroupPassWord());
+        values.put(KEY_GROUPCREATOR, newGroup.getCreator().getId());
+    }
+    /*---/GROUPS---*/
 }

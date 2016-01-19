@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LocBrowserActivity extends AppCompatActivity {
@@ -45,7 +46,15 @@ public class LocBrowserActivity extends AppCompatActivity {
         //Get user from GlobalVariable to add the username to the textview
         //and to get all locations by user
         User user = gv.getUser(userId);
-        List<Location> locations = gv.locationByUser(user);
+        List<Location> locations = gv.locationsByUser(user);
+
+        List<String> locList = new ArrayList<>();
+        for (int i = 0 ; i < locations.size(); i++){
+            locList.add(locations.get(i).getLat() + "");
+            locList.add(locations.get(i).getLng() + "");
+        }
+
+        Log.d("oma", "Locationslist: " + locList);
 
         //Set tvUserName text to users username
         tvUserName.setText(user.getUserName());

@@ -13,6 +13,15 @@ public class Group {
         this.groupName = groupName;
         this.groupPassWord = groupPassWord;
         this.creator = creator;
+        this.users.add(creator);
+    }
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public User getCreator() {
@@ -55,6 +64,7 @@ public class Group {
         this.users.remove(user);
     }
 
+    int groupId;
     String groupName;
     String groupPassWord;
     User creator;

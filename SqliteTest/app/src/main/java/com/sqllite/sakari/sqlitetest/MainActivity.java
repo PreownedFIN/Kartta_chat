@@ -38,9 +38,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //Adding a new user manually (not recommended)
-                gv.addNewUser("Matti");
-
         //Logging all users
         List<User> allUsers = gv.getAllUsers();
         ArrayList<String> userLog = new ArrayList<>();
