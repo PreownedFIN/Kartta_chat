@@ -37,7 +37,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     private static final String KEY_GROUPNAME = "groupname";
     private static final String KEY_GROUPPWORD = "grouppword";
     private static final String KEY_GROUPCREATOR = "grouppword";
-    private static final String KEY_GROUPUSERS = "grouppword";
+    private static final String KEY_GROUPUSERS = "groupusers";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -56,7 +56,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
                 + KEY_LAT + " TEXT, " + KEY_LNG + " TEXT" + ")";
         String CREATE_GROUPS_TABLE = "CREATE TABLE " + TABLE_GROUPS + "("
                 + KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + KEY_GROUPNAME + " TEXT, "
-                + KEY_GROUPPWORD + " TEXT, " + ")";
+                + KEY_GROUPPWORD + " TEXT, " + KEY_GROUPUSERS + " TEXT " + ")";
         Log.d("oma", "Create users table: " + CREATE_USERS_TABLE);
         Log.d("oma", "Create users table: " + CREATE_LOCATIONS_TABLE);
 
@@ -156,6 +156,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             } while (cursor.moveToNext());
         }
 
+        cursor.close();
         // return user list
         return userList;
 
@@ -165,15 +166,17 @@ public class DatabaseHandler extends SQLiteOpenHelper{
     public int getUserCount(){
 
         String countQuery = "SELECT  * FROM " + TABLE_USERS;
+        int userCount = 0;
 
         //Initializing database connection
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
 
-        // return count
-        return cursor.getCount();
+        userCount = cursor.getCount();
 
+        // return count
+        return userCount;
     }
 
     // Updating single user
@@ -219,6 +222,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_LNG, location.getLng());
 
         newLocationId = db.insert(TABLE_LOCATIONS, null, values);
+        db.close();
 
         return newLocationId;
     }
@@ -244,6 +248,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         returnLoc.setLat(c.getInt(c.getColumnIndex(KEY_LAT)));
         returnLoc.setLng(c.getInt(c.getColumnIndex(KEY_LNG)));
 
+        db.close();
         return returnLoc;
     }
 
@@ -271,6 +276,9 @@ public class DatabaseHandler extends SQLiteOpenHelper{
             } while (c.moveToNext());
         }
 
+        //Close the cursor
+        c.close();
+
         return locationList;
     }
 
@@ -295,6 +303,7 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         returnLoc.setLat(c.getFloat(c.getColumnIndex(KEY_LAT)));
         returnLoc.setLng(c.getFloat(c.getColumnIndex(KEY_LNG)));
 
+        c.close();
         return returnLoc;
     }
 
@@ -317,6 +326,16 @@ public class DatabaseHandler extends SQLiteOpenHelper{
         values.put(KEY_GROUPNAME, newGroup.getGroupName());
         values.put(KEY_GROUPPWORD, newGroup.getGroupPassWord());
         values.put(KEY_GROUPCREATOR, newGroup.getCreator().getId());
+
+        db.insert(TABLE_GROUPS, null, values);
+        db.close();
+    }
+
+    public void joinGroup(Group group, User user){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String selectQuery = "SELECT * FROM " + TABLE_GROUPS + " WHERE "
+                + KEY_ID + " = " + group.getGroupId() + " ORDER BY " + KEY_ID + " DESC limit 1";
     }
     /*---/GROUPS---*/
 }

@@ -40,8 +40,6 @@ public class GlobalVariables{
         Log.d("oma", "Adding user: " + userName);
         int newUserId = db.addUser(new User(userName));
 
-        newLocation(new Location(), getUser(newUserId));
-
         return newUserId;
     }
 
