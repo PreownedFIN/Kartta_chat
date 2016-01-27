@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        gv.currentUser = new User();
+
         //Logging all users
         List<User> allUsers = gv.getAllUsers();
         ArrayList<String> userLog = new ArrayList<>();

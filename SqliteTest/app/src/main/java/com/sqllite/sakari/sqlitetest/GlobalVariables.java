@@ -18,6 +18,7 @@ import java.util.ListIterator;
 public class GlobalVariables{
 
     Context context;
+    User currentUser;
 
     public GlobalVariables(){
 
@@ -32,6 +33,22 @@ public class GlobalVariables{
 
     //TODO [OPTIONAL] Have the (to-be) HttpHelper class update information
     //TODO every x seconds and queue all requests in one packet
+
+    public boolean loginUser(String userName, String pWord){
+
+        boolean loginValid;
+
+        int userId = -1/*plug HttpHelper login here*/;
+        //TODO Add HtmlHelper-class that has a loginUser method that checks
+        //TODO from the server if a user with a particular password is a valid user
+        //TODO return as userId, if not valid, return -1
+        if (userId < 0){
+            loginValid = false;
+        } else {
+            loginValid = true;
+        }
+        return loginValid;
+    }
 
     public int addNewUser(String userName){
 
