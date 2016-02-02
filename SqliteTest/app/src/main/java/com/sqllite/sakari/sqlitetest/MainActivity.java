@@ -1,9 +1,11 @@
 package com.sqllite.sakari.sqlitetest;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+                        implements LoginDialogFragment.NoticeDialogListener{
 
     GlobalVariables gv = new GlobalVariables(this);
 
@@ -151,10 +154,26 @@ public class MainActivity extends AppCompatActivity {
         TextView tvLat =  (TextView) findViewById(R.id.tvLatText);
         TextView tvLng =  (TextView) findViewById(R.id.tvLngText);
 
-        float randLat = -90 + 90 * r.nextFloat();
-        float randLng = -180 + 180 * r.nextFloat();
+        float randLat = -90.0f + 90.0f * r.nextFloat();
+        float randLng = -180.0f + 180.0f * r.nextFloat();
 
         tvLat.setText(randLat + "");
         tvLng.setText(randLng + "");
+    }
+
+    public void onLoginClick(View v) {
+
+        //Show LoginDialogFragment with Username and password fields
+        DialogFragment dialog = new LoginDialogFragment();
+        dialog.show(getFragmentManager(), "LoginDialogFragment");
+
+    }
+
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.d("oma", "Logged in!");
+    }
+
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.d("oma", "Login cancelled");
     }
 }

@@ -28,9 +28,11 @@ public class Group {
         return creator;
     }
 
+    /* This could also come in handy if the group's creator status becomes
+    changeable
     public void setCreator(User creator) {
         this.creator = creator;
-    }
+    }*/
 
     public String getGroupName() {
         return groupName;
@@ -44,9 +46,10 @@ public class Group {
         return groupPassWord;
     }
 
+    /* The change of group's password could be implemented later
     public void setGroupPassWord(String groupPassWord) {
         this.groupPassWord = groupPassWord;
-    }
+    }*/
 
     public List<User> getUsers() {
         return users;

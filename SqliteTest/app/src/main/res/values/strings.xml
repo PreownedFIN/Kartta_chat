@@ -13,4 +13,7 @@
     <string name="browse_locations_database">locations database</string>
     <string name="browse_group_database">group database</string>
     <string name="title_activity_loc_browser">LocBrowserActivity</string>
+    <string name="login_header">Login</string>
+    <string name="password">Password</string>
+    <string name="cancel">Cancel</string>
 </resources>

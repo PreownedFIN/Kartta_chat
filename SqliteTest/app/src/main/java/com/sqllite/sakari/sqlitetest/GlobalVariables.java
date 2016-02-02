@@ -52,9 +52,10 @@ public class GlobalVariables{
 
     public int addNewUser(String userName){
 
+        //New DatabaseHandler
         DatabaseHandler db = new DatabaseHandler(context);
 
-        Log.d("oma", "Adding user: " + userName);
+        //Place the value DatabaseHandler to-be returned newUserId
         int newUserId = db.addUser(new User(userName));
 
         return newUserId;
@@ -137,6 +138,7 @@ public class GlobalVariables{
 
         List<Location> userLocationList = db.getLocationByUser(user);
 
+        /* Add a dummy location to avoid crashes if user has no locations */
         if (userLocationList == null){
             userLocationList.add(new Location(10.00000f, 10.00000f));
         }
